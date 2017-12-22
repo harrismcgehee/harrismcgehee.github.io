@@ -4,6 +4,7 @@ title = "A Hugo website"
 theme = "hugo-lithium-theme"
 googleAnalytics = ""
 disqusShortname = ""
+relativeurls = true
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [permalinks]

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Question on A Hugo website</title>
+    <link>/tags/question/</link>
+    <description>Recent content in Question on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 05 Dec 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/question/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>More flexible percent labels</title>
+      <link>/2017/12/05/more-flexible-percent-labels/</link>
+      <pubDate>Tue, 05 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/12/05/more-flexible-percent-labels/</guid>
+      <description>Documentation used:
+sprintf - https://www.rdocumentation.org/packages/base/versions/3.4.3/topics/sprintf scale_y_continuous - https://www.rdocumentation.org/packages/ggplot2/versions/2.2.1/topics/scale_continuous
+suppressPackageStartupMessages(library(tidyverse)) formatP &amp;lt;- function(x, d=1){ sprintf(glue::glue(&amp;quot;%0.{d}f%%&amp;quot;),x*100) } data.frame(y=runif(10), x = rep(c(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;))) %&amp;gt;% ggplot(aes(x=x, y=y)) + geom_jitter() + geom_text(aes(x = &amp;quot;c&amp;quot;, y=mean(y), label = mean(y)), check_overlap = TRUE) + geom_text(aes(x = &amp;quot;d&amp;quot;, y=mean(y), label = formatP(mean(y), 2)), check_overlap = TRUE) + geom_text(aes(x = &amp;quot;e&amp;quot;, y=mean(y), label = formatP(mean(y), 3)), check_overlap = TRUE) + scale_y_continuous(labels = formatP) data.frame(y=runif(10), x = rep(c(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;))) %&amp;gt;% ggplot(aes(x=x, y=y)) + geom_jitter() + geom_text(aes(x = &amp;quot;c&amp;quot;, y=mean(y), label = mean(y)), check_overlap = TRUE) + geom_text(aes(x = &amp;quot;d&amp;quot;, y=mean(y), label = formatP(mean(y), 2)), check_overlap = TRUE) + geom_text(aes(x = &amp;quot;e&amp;quot;, y=mean(y), label = formatP(mean(y), 3)), check_overlap = TRUE) + scale_y_continuous(labels = formatP(3)) ## Error in f(.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,46 @@
+---
+title: Why are these skinny boxplots?
+author: Harris
+date: '2017-10-09'
+slug: why-are-these-skinny-boxplots
+categories:
+  - R
+tags:
+  - plot
+---
+
+```{r, echo=FALSE}
+suppressPackageStartupMessages(library(tidyverse))
+```
+
+```{r}
+diamonds %>% str()
+```
+
+Nice fat boxplots.
+
+```{r}
+diamonds %>% 
+  filter(as.numeric(cut) <= 3,
+         as.numeric(clarity) <= 3,
+         as.numeric(color) < 3) %>% 
+  ggplot(aes(x=cut, y= price, fill = cut)) +
+  geom_boxplot(outlier.shape = NA)
+```
+
+Weird skinny boxplots when adding the `facet_grid()`.
+
+```{r}
+diamonds %>% 
+  filter(as.numeric(cut) <= 3,
+         as.numeric(clarity) <= 3,
+         as.numeric(color) < 3) %>% 
+  ggplot(aes(x=cut, y= price, fill = cut)) +
+  geom_boxplot(outlier.shape = NA) + 
+  facet_grid(clarity ~ color)
+```
+
+```{r, collapse=TRUE}
+devtools::session_info()
+```
+

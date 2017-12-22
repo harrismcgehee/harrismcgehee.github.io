@@ -1,0 +1,37 @@
+---
+title: Make facetted pictorial fraction charts
+author: Harris
+date: '2017-11-30'
+slug: make-facetted-pictorial-fraction-charts
+categories:
+  - R
+tags:
+  - plot
+---
+
+
+
+<p>Posted a link here: <a href="https://community.rstudio.com/t/is-there-a-package-geom-for-making-pictorial-fraction-charts/3233"></a></p>
+<pre class="r"><code>suppressPackageStartupMessages(library(tidyverse))
+
+df &lt;- tibble(a=runif(4),b=letters[1:4], p=list(seq(.01,1,.01))) %&gt;% 
+  unnest() %&gt;% 
+  mutate(q = ifelse(a&gt;p,1,0),
+         label = paste(b,scales::percent(a)),
+         x = ((p-0.01)*100)%%10,
+         y = ((p-0.01)*100)%/%10) %&gt;%
+  ggplot() +
+  geom_point(mapping=aes(x=x, y=y, color = q, fill=q, shape = factor(q))) +
+  scale_y_continuous(name=&quot;&quot;) +
+  scale_x_continuous(name=&quot;&quot;) +
+  scale_shape_manual(values = c(25,24))  +
+  guides(fill=FALSE, shape=FALSE, color=FALSE) +
+  facet_wrap(~label, nrow = 2) + 
+  theme_void()</code></pre>
+<p>Future work:</p>
+<ul>
+<li>Would like to combine ggimage and create a <code>geom_pictorial()</code>
+<ul>
+<li><code>geom_pictorial(aes(value = a), grid_dimension = c(10,10), shapes = c(image1, image2))</code></li>
+</ul></li>
+</ul>

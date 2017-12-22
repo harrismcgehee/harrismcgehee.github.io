@@ -1,0 +1,67 @@
+---
+title: Don't let facets out of order
+author: Harris
+date: '2017-12-22'
+slug: don-t-let-facets-out-of-order
+categories:
+  - R
+tags:
+  - plot
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE}
+library(tidyverse)
+```
+
+```{r}
+test_df <- data_frame(values = c(rnorm(900)), letter = rep(letters[1:9],100)) %>% 
+  group_by(letter) %>% 
+  mutate(max_val = max(values)) %>% 
+  ungroup() %>% 
+  mutate(letter_f = fct_reorder(factor(letter), max_val))
+
+labels <- test_df %>% group_by(letter) %>%  summarise(max = max(values)) %>%  rename(letter_f = letter)
+```
+
+## These are getting resorted!
+
+```{r}
+test_df %>% 
+  ggplot(aes(x=values)) +
+  geom_density() +
+  facet_wrap(~letter_f, ncol = 3)
+
+labels %>%  arrange(max)
+```
+
+## Add the label and they are unsorted!
+
+```{r}
+test_df %>% 
+  ggplot(aes(x=values)) +
+  geom_density() +
+  geom_text(data=labels, aes(x=0,y=Inf, label=prettyNum(max)), vjust = 1) +
+  facet_wrap(~letter_f, ncol = 3)
+```
+
+Because there is a type conflict between the 2 dataframes used in plotting.
+
+My best guess is that it stacks `labels` and `test_df`, and when `labels.letter_f` is character, that overtakes `test_df.letter_f` factor levels.
+
+## Back again
+
+Just factor `labels.letter_f` or use the factor column in your `group_by`.
+
+```{r}
+labels_f <- test_df %>% group_by(letter_f) %>% summarise(max = max(values))
+
+test_df %>% 
+  ggplot(aes(x=values)) +
+  geom_density() +
+  geom_text(data=labels_f, aes(x=0,y=Inf, label=prettyNum(max)), vjust = 1) +
+  facet_wrap(~letter_f, ncol = 3)
+```

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+<title>Label values along ecdf curve - A Hugo website</title>
+<meta property="og:title" content="Label values along ecdf curve - A Hugo website">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="../../../../css/fonts.css" media="all">
+<link rel="stylesheet" href="../../../../css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="../../../../" class="nav-logo">
+    <img src="../../../../images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="../../../../about/">About</a></li>
+    
+    <li><a href="https://github.com/harrismcgehee">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/harrismcgehee">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Label values along ecdf curve</h1>
+
+    
+    <span class="article-date">2017/12/22</span>
+    
+
+    <div class="article-content">
+      <div id="fake-data" class="section level1">
+<h1>fake data</h1>
+<pre class="r"><code>test_df &lt;- data.frame(values = c(rnorm(1000), rep(-2, 50), rnorm(50)),
+                      letter = c(rep(&quot;a&quot;,1000),rep(&quot;b&quot;,100)))</code></pre>
+</div>
+<div id="need-to-find-the-value-of-the-cumulative-probability-at-a-certain-time-value." class="section level1">
+<h1>Need to find the value of the cumulative probability at a certain time value.</h1>
+<p>Enter: <code>ecdf()</code></p>
+<div id="one-at-a-time" class="section level2">
+<h2>One at a time:</h2>
+<pre class="r"><code>(p_0_a &lt;- ecdf(filter(test_df, letter == &quot;a&quot;)$values)(0))
+## [1] 0.521
+(p_0_b &lt;- ecdf(filter(test_df, letter == &quot;b&quot;)$values)(0))
+## [1] 0.72</code></pre>
+</div>
+<div id="or-all-at-once" class="section level2">
+<h2>Or all at once:</h2>
+<div id="step-1-nest-the-data-inside-a-new-column." class="section level3">
+<h3>Step 1: <code>nest</code> the data inside a new column.</h3>
+<pre class="r"><code>test_df %&gt;% 
+  group_by(letter) %&gt;% 
+  nest(values)
+## # A tibble: 2 x 2
+##   letter                 data
+##   &lt;fctr&gt;               &lt;list&gt;
+## 1      a &lt;tibble [1,000 x 1]&gt;
+## 2      b   &lt;tibble [100 x 1]&gt;</code></pre>
+</div>
+<div id="step-2-shove-that-data-into-the-ecdf-function-and-go-ahead-and-evaluate-at-datapoint-0-drop-the-nested-data" class="section level3">
+<h3>Step 2: Shove that data into the <code>ecdf</code> function; and go ahead and evaluate at datapoint 0; drop the nested data</h3>
+<pre class="r"><code>labels &lt;- test_df %&gt;% 
+  group_by(letter) %&gt;% 
+  nest(values) %&gt;% 
+  mutate(y_at_0 = map_dbl(data, ~ecdf(.x$values)(0))) %&gt;% 
+  select(-data) %&gt;% 
+  print()
+## # A tibble: 2 x 2
+##   letter y_at_0
+##   &lt;fctr&gt;  &lt;dbl&gt;
+## 1      a  0.521
+## 2      b  0.720</code></pre>
+</div>
+<div id="step-3-plot-it." class="section level3">
+<h3>Step 3: plot it.</h3>
+<pre class="r"><code>ggplot(data = test_df, aes(x = values, col = letter)) +
+  stat_ecdf(pad = FALSE) +
+  coord_cartesian(xlim = c(-3,0)) + 
+  geom_text(data = labels, aes(x=0, y=y_at_0, label = paste(letter, scales::percent(y_at_0))), vjust = -0.25, hjust = 1)</code></pre>
+<p><img src="../../../../post/2017-12-22-label-ecdf_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="this-works-because-ecdf-returns-a-function-that-takes-in-a-value-to-evaluate" class="section level1">
+<h1>This works because <code>ecdf</code> returns a function that takes in a value to evaluate</h1>
+<pre class="r"><code># returns a function
+str(ecdf(test_df$values))
+## function (v)  
+##  - attr(*, &quot;class&quot;)= chr [1:3] &quot;ecdf&quot; &quot;stepfun&quot; &quot;function&quot;
+##  - attr(*, &quot;call&quot;)= language ecdf(test_df$values)</code></pre>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="../../../../index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="../../../../images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="../../../../js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

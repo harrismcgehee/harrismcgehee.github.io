@@ -6,20 +6,19 @@
     <description>Recent content in Plot on A Hugo website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Jul 2015 21:13:14 -0500</lastBuildDate>
+    <lastBuildDate>Fri, 22 Dec 2017 21:13:14 -0500</lastBuildDate>
     
 	<atom:link href="/tags/plot/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Hello R Markdown</title>
-      <link>/2015/07/23/hello-r-markdown/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      <title>Label values along ecdf curve</title>
+      <link>/2017/12/22/label-values-along-ecdf-curve/</link>
+      <pubDate>Fri, 22 Dec 2017 21:13:14 -0500</pubDate>
       
-      <guid>/2015/07/23/hello-r-markdown/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+      <guid>/2017/12/22/label-values-along-ecdf-curve/</guid>
+      <description>fake data test_df &amp;lt;- data.frame(values = c(rnorm(1000), rep(-2, 50), rnorm(50)), letter = c(rep(&amp;quot;a&amp;quot;,1000),rep(&amp;quot;b&amp;quot;,100)))  Need to find the value of the cumulative probability at a certain time value. Enter: ecdf()
+One at a time: (p_0_a &amp;lt;- ecdf(filter(test_df, letter == &amp;quot;a&amp;quot;)$values)(0)) ## [1] 0.521 (p_0_b &amp;lt;- ecdf(filter(test_df, letter == &amp;quot;b&amp;quot;)$values)(0)) ## [1] 0.72  Or all at once: Step 1: nest the data inside a new column. test_df %&amp;gt;% group_by(letter) %&amp;gt;% nest(values) ## # A tibble: 2 x 2 ## letter data ## &amp;lt;fctr&amp;gt; &amp;lt;list&amp;gt; ## 1 a &amp;lt;tibble [1,000 x 1]&amp;gt; ## 2 b &amp;lt;tibble [100 x 1]&amp;gt;  Step 2: Shove that data into the ecdf function; and go ahead and evaluate at datapoint 0; drop the nested data labels &amp;lt;- test_df %&amp;gt;% group_by(letter) %&amp;gt;% nest(values) %&amp;gt;% mutate(y_at_0 = map_dbl(data, ~ecdf(.</description>
     </item>
     
   </channel>

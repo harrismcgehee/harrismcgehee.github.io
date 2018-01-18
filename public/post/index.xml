@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on A Hugo website</title>
+    <title>Posts on Harris McGehee learning</title>
     <link>/post/</link>
-    <description>Recent content in Posts on A Hugo website</description>
+    <description>Recent content in Posts on Harris McGehee learning</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Dec 2017 21:13:14 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>tibble::deframe and writexl::write_xlsx</title>
+      <link>/2018/01/18/tibble-deframe-and-writexl-write-xlsx/</link>
+      <pubDate>Thu, 18 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/01/18/tibble-deframe-and-writexl-write-xlsx/</guid>
+      <description>I needed to create a multi-sheet Excel workbook for a collaborator to review the most common comments fields. Luckily, I remembered that writexl::write_xlsx can do just that if you pass a list in as the first argument. Even more luckily, I saw a tweet from Jenny Bryan earlier this week about tibble::deframe.
+ From the documentation:
+ deframe() converts two-column data frames to a named vector or list, using the first column as name and the second column as value.</description>
+    </item>
     
     <item>
       <title>Label values along ecdf curve</title>
@@ -18,7 +29,7 @@
       
       <guid>/2017/12/22/label-values-along-ecdf-curve/</guid>
       <description>fake data test_df &amp;lt;- data.frame(values = c(rnorm(1000), rep(-2, 50), rnorm(50)), letter = c(rep(&amp;quot;a&amp;quot;,1000),rep(&amp;quot;b&amp;quot;,100)))  Need to find the value of the cumulative probability at a certain time value. Enter: ecdf()
-One at a time: (p_0_a &amp;lt;- ecdf(filter(test_df, letter == &amp;quot;a&amp;quot;)$values)(0)) ## [1] 0.521 (p_0_b &amp;lt;- ecdf(filter(test_df, letter == &amp;quot;b&amp;quot;)$values)(0)) ## [1] 0.72  Or all at once: Step 1: nest the data inside a new column. test_df %&amp;gt;% group_by(letter) %&amp;gt;% nest(values) ## # A tibble: 2 x 2 ## letter data ## &amp;lt;fctr&amp;gt; &amp;lt;list&amp;gt; ## 1 a &amp;lt;tibble [1,000 x 1]&amp;gt; ## 2 b &amp;lt;tibble [100 x 1]&amp;gt;  Step 2: Shove that data into the ecdf function; and go ahead and evaluate at datapoint 0; drop the nested data labels &amp;lt;- test_df %&amp;gt;% group_by(letter) %&amp;gt;% nest(values) %&amp;gt;% mutate(y_at_0 = map_dbl(data, ~ecdf(.</description>
+One at a time: (p_0_a &amp;lt;- ecdf(filter(test_df, letter == &amp;quot;a&amp;quot;)$values)(0)) ## [1] 0.495 (p_0_b &amp;lt;- ecdf(filter(test_df, letter == &amp;quot;b&amp;quot;)$values)(0)) ## [1] 0.78  Or all at once: Step 1: nest the data inside a new column. test_df %&amp;gt;% group_by(letter) %&amp;gt;% nest(values) ## # A tibble: 2 x 2 ## letter data ## &amp;lt;fctr&amp;gt; &amp;lt;list&amp;gt; ## 1 a &amp;lt;tibble [1,000 x 1]&amp;gt; ## 2 b &amp;lt;tibble [100 x 1]&amp;gt;  Step 2: Shove that data into the ecdf function; and go ahead and evaluate at datapoint 0; drop the nested data labels &amp;lt;- test_df %&amp;gt;% group_by(letter) %&amp;gt;% nest(values) %&amp;gt;% mutate(y_at_0 = map_dbl(data, ~ecdf(.</description>
     </item>
     
     <item>
@@ -27,7 +38,7 @@ One at a time: (p_0_a &amp;lt;- ecdf(filter(test_df, letter == &amp;quot;a&amp;q
       <pubDate>Fri, 22 Dec 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/12/22/don-t-let-facets-out-of-order/</guid>
-      <description>## ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ── ## ✔ ggplot2 2.2.1.9000 ✔ purrr 0.2.4 ## ✔ tibble 1.3.4 ✔ dplyr 0.7.4 ## ✔ tidyr 0.7.2 ✔ stringr 1.2.0 ## ✔ readr 1.1.1 ✔ forcats 0.2.0 ## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ── ## ✖ dplyr::filter() masks stats::filter() ## ✖ dplyr::lag() masks stats::lag() test_df &amp;lt;- data_frame(values = c(rnorm(900)), letter = rep(letters[1:9],100)) %&amp;gt;% group_by(letter) %&amp;gt;% mutate(max_val = max(values)) %&amp;gt;% ungroup() %&amp;gt;% mutate(letter_f = fct_reorder(factor(letter), max_val)) labels &amp;lt;- test_df %&amp;gt;% group_by(letter) %&amp;gt;% summarise(max = max(values)) %&amp;gt;% rename(letter_f = letter) These are getting resorted!</description>
+      <description>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ── ## ✔ ggplot2 2.2.1.9000 ✔ purrr 0.2.4 ## ✔ tibble 1.3.4 ✔ dplyr 0.7.4 ## ✔ tidyr 0.7.2 ✔ stringr 1.2.0 ## ✔ readr 1.1.1 ✔ forcats 0.2.0 ## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ── ## ✖ dplyr::filter() masks stats::filter() ## ✖ dplyr::lag() masks stats::lag() test_df &amp;lt;- data_frame(values = c(rnorm(900)), letter = rep(letters[1:9],100)) %&amp;gt;% group_by(letter) %&amp;gt;% mutate(max_val = max(values)) %&amp;gt;% ungroup() %&amp;gt;% mutate(letter_f = fct_reorder(factor(letter), max_val)) labels &amp;lt;- test_df %&amp;gt;% group_by(letter) %&amp;gt;% summarise(max = max(values)) %&amp;gt;% rename(letter_f = letter) These are getting resorted!</description>
     </item>
     
     <item>
@@ -59,6 +70,37 @@ suppressPackageStartupMessages(library(tidyverse)) df &amp;lt;- tibble(a=runif(4
       
       <guid>/2017/10/09/why-are-these-skinny-boxplots/</guid>
       <description>diamonds %&amp;gt;% str() ## Classes &amp;#39;tbl_df&amp;#39;, &amp;#39;tbl&amp;#39; and &amp;#39;data.frame&amp;#39;: 53940 obs. of 10 variables: ## $ carat : num 0.23 0.21 0.23 0.29 0.31 0.24 0.24 0.26 0.22 0.23 ... ## $ cut : Ord.factor w/ 5 levels &amp;quot;Fair&amp;quot;&amp;lt;&amp;quot;Good&amp;quot;&amp;lt;..: 5 4 2 4 2 3 3 3 1 3 ... ## $ color : Ord.factor w/ 7 levels &amp;quot;D&amp;quot;&amp;lt;&amp;quot;E&amp;quot;&amp;lt;&amp;quot;F&amp;quot;&amp;lt;&amp;quot;G&amp;quot;&amp;lt;..: 2 2 2 6 7 7 6 5 2 5 ... ## $ clarity: Ord.</description>
+    </item>
+    
+    <item>
+      <title>future &#43; purrr</title>
+      <link>/2017/10/03/future-purrr/</link>
+      <pubDate>Tue, 03 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/10/03/future-purrr/</guid>
+      <description>This is just a trial/demo of an amazing blog post:
+http://www.jottr.org/2017/06/the-many-faced-future.html
+library(&amp;quot;purrr&amp;quot;) library(&amp;quot;future&amp;quot;) plan(multiprocess) #serial system.time( 1:4 %&amp;gt;% map(~Sys.sleep(2)) ) ## user system elapsed ## 0.001 0.001 8.011 #parallel system.time( 1:4 %&amp;gt;% map(~ future(Sys.sleep(2))) %&amp;gt;% values ) ## user system elapsed ## 0.043 0.021 2.056 </description>
+    </item>
+    
+    <item>
+      <title>Can you combine two aregImpute objects?</title>
+      <link>/2017/08/08/can-you-combine-two-aregimpute-objects/</link>
+      <pubDate>Tue, 08 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/08/08/can-you-combine-two-aregimpute-objects/</guid>
+      <description>In order to parallelize Hmisc::aregImpute(), we need to know if we can divide the imputations across multiple cores and combine the output objects.
+Setup Example impute code is from https://www.rdocumentation.org/packages/Hmisc/versions/4.0-3/topics/aregImpute.
+library(&amp;quot;Hmisc&amp;quot;) ## Loading required package: lattice ## Loading required package: survival ## Loading required package: Formula ## Loading required package: ggplot2 ## ## Attaching package: &amp;#39;Hmisc&amp;#39; ## The following objects are masked from &amp;#39;package:base&amp;#39;: ## ## format.pval, round.POSIXt, trunc.POSIXt, units library(&amp;quot;tidyverse&amp;quot;) ## ── Attaching packages ────────────────────────────────── tidyverse 1.</description>
+    </item>
+    
+    <item>
+      <title>Annotate ggplot map with circle label</title>
+      <link>/2017/03/10/annotate-ggplot-map-with-circle-label/</link>
+      <pubDate>Fri, 10 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/03/10/annotate-ggplot-map-with-circle-label/</guid>
+      <description>Prep library(ggplot2) crimes &amp;lt;- data.frame(state = tolower(rownames(USArrests)), USArrests) crimesm &amp;lt;- reshape2::melt(crimes, id = 1) states_map &amp;lt;- map_data(&amp;quot;state&amp;quot;)   Make your map  map &amp;lt;- ggplot(crimes, aes(map_id = state)) + geom_map(aes(fill = UrbanPop), map = states_map) + expand_limits(x = states_map$long, y = states_map$lat) + coord_map(projection = &amp;quot;polyconic&amp;quot;) + theme_void() + theme(legend.position = &amp;quot;none&amp;quot;) map  Make the map a grid graphical object (“grob”)  grobMap &amp;lt;- ggplotGrob(map)  Make a container canvas  df &amp;lt;- data.</description>
     </item>
     
   </channel>

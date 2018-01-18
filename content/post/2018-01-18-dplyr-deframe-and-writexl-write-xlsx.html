@@ -1,0 +1,91 @@
+---
+title: tibble::deframe and writexl::write_xlsx
+author: Harris
+date: '2018-01-18'
+slug: tibble-deframe-and-writexl-write-xlsx
+categories:
+  - R
+tags: []
+---
+
+
+
+<p>I needed to create a multi-sheet Excel workbook for a collaborator to review the most common comments fields. Luckily, I remembered that <code>writexl::write_xlsx</code> can do just that if you pass a list in as the first argument. Even more luckily, I saw a tweet from Jenny Bryan earlier this week about <code>tibble::deframe</code>.</p>
+<div class="figure">
+<img src="/img/20180118_tweet.png" />
+
+</div>
+<p>From the documentation:</p>
+<blockquote>
+<p>deframe() converts <strong>two-column data frames</strong> to a named vector or <strong>list</strong>, using the first column as name and the second column as value.</p>
+</blockquote>
+<div id="load-packages" class="section level2">
+<h2>Load packages:</h2>
+<pre class="r"><code>suppressPackageStartupMessages(library(tidyverse))
+library(writexl)</code></pre>
+</div>
+<div id="create-the-thing-that-i-want-collaborator-to-see" class="section level2">
+<h2>Create the thing that I want collaborator to see:</h2>
+<pre class="r"><code>counts &lt;- ggplot2::diamonds %&gt;% 
+  dplyr::count(color, cut) %&gt;% 
+  dplyr::arrange(color, desc(n)) %&gt;% 
+  print()</code></pre>
+<pre><code>## # A tibble: 35 x 3
+##    color       cut     n
+##    &lt;ord&gt;     &lt;ord&gt; &lt;int&gt;
+##  1     D     Ideal  2834
+##  2     D   Premium  1603
+##  3     D Very Good  1513
+##  4     D      Good   662
+##  5     D      Fair   163
+##  6     E     Ideal  3903
+##  7     E Very Good  2400
+##  8     E   Premium  2337
+##  9     E      Good   933
+## 10     E      Fair   224
+## # ... with 25 more rows</code></pre>
+</div>
+<div id="convert-to-list-object" class="section level2">
+<h2>Convert to list object</h2>
+<p>Here, we are tucking the data into a single column with <code>tidyr::nest()</code>. Then we <code>deframe()</code> the sheets <code>tibble</code> into the list.</p>
+<pre class="r"><code>sheets &lt;- counts %&gt;% 
+  tidyr::nest(-cut, .key = &quot;these_get_printed_in_excel&quot;) %&gt;%
+  print() </code></pre>
+<pre><code>## # A tibble: 5 x 2
+##         cut these_get_printed_in_excel
+##       &lt;ord&gt;                     &lt;list&gt;
+## 1     Ideal           &lt;tibble [7 x 2]&gt;
+## 2   Premium           &lt;tibble [7 x 2]&gt;
+## 3 Very Good           &lt;tibble [7 x 2]&gt;
+## 4      Good           &lt;tibble [7 x 2]&gt;
+## 5      Fair           &lt;tibble [7 x 2]&gt;</code></pre>
+<pre class="r"><code>sheets_list &lt;- tibble::deframe(sheets)
+str(sheets_list)</code></pre>
+<pre><code>## List of 5
+##  $ Ideal    :Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   7 obs. of  2 variables:
+##   ..$ color: Ord.factor w/ 7 levels &quot;D&quot;&lt;&quot;E&quot;&lt;&quot;F&quot;&lt;&quot;G&quot;&lt;..: 1 2 3 4 5 6 7
+##   ..$ n    : int [1:7] 2834 3903 3826 4884 3115 2093 896
+##  $ Premium  :Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   7 obs. of  2 variables:
+##   ..$ color: Ord.factor w/ 7 levels &quot;D&quot;&lt;&quot;E&quot;&lt;&quot;F&quot;&lt;&quot;G&quot;&lt;..: 1 2 3 4 5 6 7
+##   ..$ n    : int [1:7] 1603 2337 2331 2924 2360 1428 808
+##  $ Very Good:Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   7 obs. of  2 variables:
+##   ..$ color: Ord.factor w/ 7 levels &quot;D&quot;&lt;&quot;E&quot;&lt;&quot;F&quot;&lt;&quot;G&quot;&lt;..: 1 2 3 4 5 6 7
+##   ..$ n    : int [1:7] 1513 2400 2164 2299 1824 1204 678
+##  $ Good     :Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   7 obs. of  2 variables:
+##   ..$ color: Ord.factor w/ 7 levels &quot;D&quot;&lt;&quot;E&quot;&lt;&quot;F&quot;&lt;&quot;G&quot;&lt;..: 1 2 3 4 5 6 7
+##   ..$ n    : int [1:7] 662 933 909 871 702 522 307
+##  $ Fair     :Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   7 obs. of  2 variables:
+##   ..$ color: Ord.factor w/ 7 levels &quot;D&quot;&lt;&quot;E&quot;&lt;&quot;F&quot;&lt;&quot;G&quot;&lt;..: 1 2 3 4 5 6 7
+##   ..$ n    : int [1:7] 163 224 312 314 303 175 119</code></pre>
+</div>
+<div id="out-the-door" class="section level2">
+<h2>Out the door</h2>
+<p>The <code>sheets_list</code> is the perfect structure for these multi-sheet Excel workbooks.</p>
+<pre class="r"><code>writexl::write_xlsx(sheets_list) %&gt;% invisible()</code></pre>
+<div class="figure">
+<img src="/img/20180118_excel.png" />
+
+</div>
+<p>ps. I’ve been enjoying this <code>%&gt;% invisible()</code> in my <code>.Rmd</code> recently when I don’t want to comment out code, but I don’t want to print anything. It is a nicer than having to hop up into the r chunk options.</p>
+<p>Thoughts?</p>
+</div>

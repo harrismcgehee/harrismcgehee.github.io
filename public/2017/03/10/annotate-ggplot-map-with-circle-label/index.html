@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+<title>Annotate ggplot map with circle label - Harris McGehee learning</title>
+<meta property="og:title" content="Annotate ggplot map with circle label - Harris McGehee learning">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="../../../../css/fonts.css" media="all">
+<link rel="stylesheet" href="../../../../css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="../../../../" class="nav-logo">
+    <img src="../../../../images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="../../../../about/">About</a></li>
+    
+    <li><a href="https://github.com/harrismcgehee">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/harrismcgehee">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">Annotate ggplot map with circle label</h1>
+
+    
+    <span class="article-date">2017/03/10</span>
+    
+
+    <div class="article-content">
+      <div id="prep" class="section level2">
+<h2>Prep</h2>
+<pre class="r"><code>library(ggplot2)
+crimes &lt;- data.frame(state = tolower(rownames(USArrests)), USArrests)
+crimesm &lt;- reshape2::melt(crimes, id = 1)
+states_map &lt;- map_data(&quot;state&quot;) </code></pre>
+</div>
+<div id="make-your-map" class="section level2">
+<h2>Make your map</h2>
+<pre class="r"><code>  map &lt;- ggplot(crimes, aes(map_id = state)) +
+    geom_map(aes(fill = UrbanPop), map = states_map) +
+    expand_limits(x = states_map$long, y = states_map$lat) +
+    coord_map(projection = &quot;polyconic&quot;) + 
+    theme_void() +
+    theme(legend.position = &quot;none&quot;)
+  map</code></pre>
+<p><img src="../../../../post/2017-03-10-annotate-ggplot-map-with-circle-label_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="make-the-map-a-grid-graphical-object-grob" class="section level2">
+<h2>Make the map a <a href="https://stat.ethz.ch/R-manual/R-devel/library/grid/html/grid.grob.html">grid graphical object</a> (“grob”)</h2>
+<pre class="r"><code>  grobMap &lt;- ggplotGrob(map)</code></pre>
+</div>
+<div id="make-a-container-canvas" class="section level2">
+<h2>Make a container canvas</h2>
+<pre class="r"><code>  df &lt;- data.frame(x = 1:10, y = 1:10)
+  container_plot &lt;- ggplot(df, aes(x, y)) +
+    geom_blank() +
+    theme_void() 
+  
+  container_plot</code></pre>
+<p><img src="../../../../post/2017-03-10-annotate-ggplot-map-with-circle-label_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>(This space purposely blank for container plot.)</p>
+</div>
+<div id="add-a-custom-annotation" class="section level2">
+<h2>Add a custom annotation</h2>
+<p>To do that, you pass it a grob</p>
+<pre class="r"><code>  container_plot +
+    annotation_custom(grob = grobMap) </code></pre>
+<p><img src="../../../../post/2017-03-10-annotate-ggplot-map-with-circle-label_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="then-add-your-circle-annotation-custom-ribbon-annotation" class="section level2">
+<h2>Then add your circle annotation / custom ribbon annotation</h2>
+<p>alternatively <a href="http://stackoverflow.com/a/39071128/4386615">ggforce::geom_circle</a>?</p>
+<pre class="r"><code>  gg_circle &lt;- function(r, xc, yc, color=&quot;black&quot;, fill=NA, ...) {
+    x &lt;- xc + r*cos(seq(0, pi, length.out=100))
+    ymax &lt;- yc + r*sin(seq(0, pi, length.out=100))
+    ymin &lt;- yc + r*sin(seq(0, -pi, length.out=100))
+    annotate(&quot;ribbon&quot;, x=x, ymin=ymin, ymax=ymax, color=color, fill=fill, ...)
+  }</code></pre>
+</div>
+<div id="also-remove-text-and-ticks-and-lines-in-theme" class="section level2">
+<h2>Also remove text and ticks and lines in theme</h2>
+<pre class="r"><code>  container_plot +
+    annotation_custom(grob = grobMap) + 
+    gg_circle(r=1, xc=2.5, yc=6, fill=&quot;red&quot;, alpha=.5) +
+    geom_text(aes(label=&quot;65%&quot;), x=2.5, y=6) +
+    theme_void()</code></pre>
+<p><img src="../../../../post/2017-03-10-annotate-ggplot-map-with-circle-label_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="../../../../index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="../../../../images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="../../../../js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

@@ -6,8 +6,8 @@
 <meta name="generator" content="Hugo 0.31.1" />
 
 
-<title>Label values along ecdf curve - A Hugo website</title>
-<meta property="og:title" content="Label values along ecdf curve - A Hugo website">
+<title>Label values along ecdf curve - Harris McGehee learning</title>
+<meta property="og:title" content="Label values along ecdf curve - Harris McGehee learning">
 
 
 
@@ -80,9 +80,9 @@
 <div id="one-at-a-time" class="section level2">
 <h2>One at a time:</h2>
 <pre class="r"><code>(p_0_a &lt;- ecdf(filter(test_df, letter == &quot;a&quot;)$values)(0))
-## [1] 0.521
+## [1] 0.495
 (p_0_b &lt;- ecdf(filter(test_df, letter == &quot;b&quot;)$values)(0))
-## [1] 0.72</code></pre>
+## [1] 0.78</code></pre>
 </div>
 <div id="or-all-at-once" class="section level2">
 <h2>Or all at once:</h2>
@@ -108,8 +108,8 @@
 ## # A tibble: 2 x 2
 ##   letter y_at_0
 ##   &lt;fctr&gt;  &lt;dbl&gt;
-## 1      a  0.521
-## 2      b  0.720</code></pre>
+## 1      a  0.495
+## 2      b  0.780</code></pre>
 </div>
 <div id="step-3-plot-it." class="section level3">
 <h3>Step 3: plot it.</h3>

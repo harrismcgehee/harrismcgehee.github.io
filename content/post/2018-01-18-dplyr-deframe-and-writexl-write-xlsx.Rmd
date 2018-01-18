@@ -1,0 +1,64 @@
+---
+title: tibble::deframe and writexl::write_xlsx
+author: Harris
+date: '2018-01-18'
+slug: tibble-deframe-and-writexl-write-xlsx
+categories:
+  - R
+tags: []
+---
+
+I needed to create a multi-sheet Excel workbook for a collaborator to review the most common comments fields. Luckily, I remembered that `writexl::write_xlsx` can do just that if you pass a list in as the first argument.  Even more luckily, I saw a tweet from Jenny Bryan earlier this week about `tibble::deframe`.  
+
+![](/img/20180118_tweet.png)
+
+From the documentation:
+
+  > deframe() converts **two-column data frames** to a named vector or **list**, using the first column as name and the second column as value.
+
+## Load packages:
+
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+library(writexl)
+```
+
+## Create the thing that I want collaborator to see:
+
+```{r}
+counts <- ggplot2::diamonds %>% 
+  dplyr::count(color, cut) %>% 
+  dplyr::arrange(color, desc(n)) %>% 
+  print()
+```
+
+## Convert to list object
+
+Here, we are tucking the data into a single column with `tidyr::nest()`. Then we `deframe()` the sheets `tibble` into the list.
+
+```{r}
+sheets <- counts %>% 
+  tidyr::nest(-cut, .key = "these_get_printed_in_excel") %>%
+  print() 
+
+sheets_list <- tibble::deframe(sheets)
+str(sheets_list)
+```
+
+## Out the door
+
+The `sheets_list` is the perfect structure for these multi-sheet Excel workbooks.
+
+```{r}
+writexl::write_xlsx(sheets_list) %>% invisible()
+```
+
+![](/img/20180118_excel.png)
+
+ps. I've been enjoying this `%>% invisible()` in my `.Rmd` recently when I don't want to comment out code, but I don't want to print anything. It is a nicer than having to hop up into the r chunk options.
+
+Thoughts?
+
+
+
+

@@ -1,0 +1,33 @@
+---
+title: future + purrr
+author: Harris
+date: '2017-10-03'
+slug: future-purrr
+categories:
+  - R
+tags: []
+---
+
+
+
+<p>This is just a trial/demo of an amazing blog post:</p>
+<p><a href="http://www.jottr.org/2017/06/the-many-faced-future.html" class="uri">http://www.jottr.org/2017/06/the-many-faced-future.html</a></p>
+<pre class="r"><code>library(&quot;purrr&quot;)
+library(&quot;future&quot;)
+plan(multiprocess)
+
+#serial
+system.time(
+  1:4 %&gt;%
+    map(~Sys.sleep(2))
+)</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.001   0.001   8.011</code></pre>
+<pre class="r"><code>#parallel
+system.time(
+  1:4 %&gt;%
+    map(~ future(Sys.sleep(2))) %&gt;%
+    values
+)</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.043   0.021   2.056</code></pre>

@@ -1,0 +1,72 @@
+---
+title: Annotate ggplot map with circle label
+author: Harris
+date: '2017-03-10'
+slug: annotate-ggplot-map-with-circle-label
+categories:
+  - R
+tags:
+  - plot
+---
+
+
+
+<div id="prep" class="section level2">
+<h2>Prep</h2>
+<pre class="r"><code>library(ggplot2)
+crimes &lt;- data.frame(state = tolower(rownames(USArrests)), USArrests)
+crimesm &lt;- reshape2::melt(crimes, id = 1)
+states_map &lt;- map_data(&quot;state&quot;) </code></pre>
+</div>
+<div id="make-your-map" class="section level2">
+<h2>Make your map</h2>
+<pre class="r"><code>  map &lt;- ggplot(crimes, aes(map_id = state)) +
+    geom_map(aes(fill = UrbanPop), map = states_map) +
+    expand_limits(x = states_map$long, y = states_map$lat) +
+    coord_map(projection = &quot;polyconic&quot;) + 
+    theme_void() +
+    theme(legend.position = &quot;none&quot;)
+  map</code></pre>
+<p><img src="/post/2017-03-10-annotate-ggplot-map-with-circle-label_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="make-the-map-a-grid-graphical-object-grob" class="section level2">
+<h2>Make the map a <a href="https://stat.ethz.ch/R-manual/R-devel/library/grid/html/grid.grob.html">grid graphical object</a> (“grob”)</h2>
+<pre class="r"><code>  grobMap &lt;- ggplotGrob(map)</code></pre>
+</div>
+<div id="make-a-container-canvas" class="section level2">
+<h2>Make a container canvas</h2>
+<pre class="r"><code>  df &lt;- data.frame(x = 1:10, y = 1:10)
+  container_plot &lt;- ggplot(df, aes(x, y)) +
+    geom_blank() +
+    theme_void() 
+  
+  container_plot</code></pre>
+<p><img src="/post/2017-03-10-annotate-ggplot-map-with-circle-label_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>(This space purposely blank for container plot.)</p>
+</div>
+<div id="add-a-custom-annotation" class="section level2">
+<h2>Add a custom annotation</h2>
+<p>To do that, you pass it a grob</p>
+<pre class="r"><code>  container_plot +
+    annotation_custom(grob = grobMap) </code></pre>
+<p><img src="/post/2017-03-10-annotate-ggplot-map-with-circle-label_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="then-add-your-circle-annotation-custom-ribbon-annotation" class="section level2">
+<h2>Then add your circle annotation / custom ribbon annotation</h2>
+<p>alternatively <a href="http://stackoverflow.com/a/39071128/4386615">ggforce::geom_circle</a>?</p>
+<pre class="r"><code>  gg_circle &lt;- function(r, xc, yc, color=&quot;black&quot;, fill=NA, ...) {
+    x &lt;- xc + r*cos(seq(0, pi, length.out=100))
+    ymax &lt;- yc + r*sin(seq(0, pi, length.out=100))
+    ymin &lt;- yc + r*sin(seq(0, -pi, length.out=100))
+    annotate(&quot;ribbon&quot;, x=x, ymin=ymin, ymax=ymax, color=color, fill=fill, ...)
+  }</code></pre>
+</div>
+<div id="also-remove-text-and-ticks-and-lines-in-theme" class="section level2">
+<h2>Also remove text and ticks and lines in theme</h2>
+<pre class="r"><code>  container_plot +
+    annotation_custom(grob = grobMap) + 
+    gg_circle(r=1, xc=2.5, yc=6, fill=&quot;red&quot;, alpha=.5) +
+    geom_text(aes(label=&quot;65%&quot;), x=2.5, y=6) +
+    theme_void()</code></pre>
+<p><img src="/post/2017-03-10-annotate-ggplot-map-with-circle-label_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>

@@ -10,9 +10,9 @@ tags: []
 
 This is just a trial/demo of an amazing blog post:
 
-```{r}
-# http://www.jottr.org/2017/06/the-many-faced-future.html
+http://www.jottr.org/2017/06/the-many-faced-future.html
 
+```{r}
 
 library("purrr")
 library("future")

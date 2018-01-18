@@ -1,0 +1,104 @@
+---
+title: Can you combine two aregImpute objects?
+author: Harris
+date: '2017-08-08'
+slug: can-you-combine-two-aregimpute-objects
+categories:
+  - R
+tags:
+  - question
+---
+
+In order to parallelize `Hmisc::aregImpute()`, we need to know if we can divide the imputations across multiple cores and combine the output objects.
+
+## Setup
+
+Example impute code is from https://www.rdocumentation.org/packages/Hmisc/versions/4.0-3/topics/aregImpute.
+```{r}
+library("Hmisc")
+library("tidyverse")
+library("broom")
+```
+
+## Run `n.impute = 50`
+
+```{r}
+set.seed(3)
+x1 <- rnorm(200)
+x2 <- x1^2
+x3 <- runif(200)
+m <- 30
+x2[1:m] <- NA
+a <- aregImpute(~x1+x2+I(x3), n.impute=50, nk=4, match='closest') # output clipped for SO
+a
+matplot(x1[1:m]^2, a$imputed$x2)
+abline(a=0, b=1, lty=2)
+
+# x1[1:m]^2
+# a$imputed$x2
+```
+### Structure of `a`
+
+```{r}
+str(a)
+```
+
+## Proposed combine function
+
+From my naive interpretation, it seems like the worst sin might be `rsq=areg2$rsq`.
+
+
+```{r}
+c_aregImpute <- function(areg1, areg2){
+  call <- areg1$call
+  call[["n.impute"]] <- areg1$n.impute + areg2$n.impute
+  structure(list(call=call,
+                 formula=areg1$formula,
+                 match=areg1$match,
+                 fweighted=areg1$fweighted,
+                 pmmtype=areg1$pmmtype,
+                 n=areg1$n,
+                 p=areg1$p,
+                 na=areg1$na,
+                 nna=areg1$nna,
+                 type=areg1$type,
+                 tlinear=areg1$tlinear,
+                 nk=areg1$nk,
+                 cat.levels=areg1$cat.levels,
+                 df=areg1$df,
+                 n.impute=areg1$n.impute + areg2$n.impute,
+                 imputed=mapply(cbind,areg1$imputed, areg2$imputed),
+                 x=areg1$x,
+                 rsq=areg2$rsq,
+                 resampacc=areg1$resampacc),
+            class='aregImpute')
+}
+```
+
+## Run two `n.impute = 25`
+
+```{r}
+a1 <- aregImpute(~x1+x2+I(x3), n.impute=25, nk=4, match='closest') # output clipped for SO
+a2 <- aregImpute(~x1+x2+I(x3), n.impute=25, nk=4, match='closest') # output clipped for SO
+
+ca <- c_aregImpute(a1, a2)
+```
+
+## comparing `rsq` from examples.
+
+```{r}
+list(a=a$rsq , a1= a1$rsq, a2 = a2$rsq, ca = ca$rsq)
+```
+
+## comparing `a` and `ca` from examples.
+
+```{r}
+a
+ca
+```
+
+## Comparing `matplot`
+
+```{r}
+matplot(x1[1:m]^2, ca$imputed$x2)
+matplot(x1[1:m]^2, a$imputed$x2)

@@ -1,6 +1,6 @@
 baseurl = "/"
 languageCode = "en-us"
-title = "Harris McGehee learning"
+title = "Harris McGehee"
 theme = "hugo-lithium-theme"
 googleAnalytics = ""
 disqusShortname = ""

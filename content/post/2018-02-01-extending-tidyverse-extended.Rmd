@@ -1,0 +1,153 @@
+---
+title: extending tidyverse extended
+author: Harris
+date: '2018-02-01'
+slug: extending-tidyverse-extended
+categories:
+  - R
+tags: []
+---
+
+# OO
+Reference classes
+http://adv-r.had.co.nz/R5.html
+
+# Attributes
+```{r}
+#set a bunch
+x <- 1:10
+
+attr(x,"min") <- 1
+attr(x,"min")
+
+x <- structure(x, min=1, max=10)
+attributes(x)
+```
+
+```{r}
+testthat::expect_known_output
+```
+
+# use s3 generics to get pretty printing and consistency from constructors
+print.<class> 
+  should return x invisibly
+
+crayon:: package to put color into your print methods
+
+wait for cli:: package for more colors
+
+```{r}
+styler::
+```
+
+
+```{r}
+use expr( ) to capture your code
+use !! to get it back out
+
+# expr always gives you exactly what you gave it
+# enexpr quote's the thing you gave it
+
+```
+
+```{r}
+library(rlang)
+
+grouped_mean <- function(df, group_var, mean_var){
+  z <- enquo(group_var)
+  zz <- enquo(mean_var)
+  
+  df %>% 
+    group_by(!!z) %>% 
+    summarise(mean = mean(!!zz))
+}
+
+df <- data.frame(x=c(1,1,2), y=c(1,2,3))
+df %>% grouped_mean(x,y+1)
+
+
+# just always use enquo; then !!
+
+
+```
+
+```{r}
+summarise(df,
+ mean = mean(a),
+ sum = sum(a),
+ n = n()
+)
+summarise(df,
+ mean = mean(b),
+ sum = sum(b),
+ n = n()
+)
+summarise(df,
+ mean = mean(a * b),
+ sum = sum(a * b),
+ n = n()
+)
+
+
+
+mysummary <- function(df, x){
+
+ summarise(df,
+ mean = mean(!!enquo(x)),
+ sum = sum(!!enquo(x)),
+ n = n()
+)
+}
+
+df <- data.frame(a=c(1,1,2), b=c(1,2,3))
+mysummary(df, a)
+mysummary(df, b)
+mysummary(df, a*b)
+
+```
+
+```{r}
+df <- data.frame(x=c(1,1,2), y=c(1,2,3), z=c(1,2,3))
+
+df %>% group_by(x) %>% summarise(n = n())
+df %>% group_by(x, y) %>% summarise(n = n())
+df %>% group_by(x, y, z) %>% summarise(n = n())
+library(rlang)
+mygroup <- function(df, ...){
+  zz <- quos(...)
+  # but enquos is right around the corner
+  
+  df %>% group_by(!!!zz) %>% summarise(n = n())
+}
+
+df %>% mygroup(x)
+df %>% mygroup(x,y)
+df %>% mygroup(x,y,z)
+
+
+```
+
+to use tidy eval in base use expr capturing
+```{r}
+
+```
+
+```{r}
+# Activate by running
+# use_roxygen_md()
+**bold**, _italic_, `code`
+* [func()]
+* [pkg::func()]
+* [link text][func()]
+* [link text][pkg::func()]
+```
+
+```{r}
+usethis::use_vignette()
+```
+
+```{r}
+# Run pkgdown from the package directory each time you release your package:
+pkgdown::build_site()
+```
+

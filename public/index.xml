@@ -6,10 +6,19 @@
     <description>Recent content on Harris McGehee learning</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 31 Jan 2018 21:48:51 -0700</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Wed, 31 Jan 2018 21:48:51 -0700</pubDate>
+      
+      <guid>/about/</guid>
+      <description>This is a website that I&amp;rsquo;m using to share my learning and ask questions with R and RStudio. This wouldn&amp;rsquo;t be possible without the amazing blogdown package.</description>
+    </item>
     
     <item>
       <title>tibble::deframe and writexl::write_xlsx</title>
@@ -101,15 +110,6 @@ library(&amp;quot;Hmisc&amp;quot;) ## Loading required package: lattice ## Loadi
       
       <guid>/2017/03/10/annotate-ggplot-map-with-circle-label/</guid>
       <description>Prep library(ggplot2) crimes &amp;lt;- data.frame(state = tolower(rownames(USArrests)), USArrests) crimesm &amp;lt;- reshape2::melt(crimes, id = 1) states_map &amp;lt;- map_data(&amp;quot;state&amp;quot;)   Make your map  map &amp;lt;- ggplot(crimes, aes(map_id = state)) + geom_map(aes(fill = UrbanPop), map = states_map) + expand_limits(x = states_map$long, y = states_map$lat) + coord_map(projection = &amp;quot;polyconic&amp;quot;) + theme_void() + theme(legend.position = &amp;quot;none&amp;quot;) map  Make the map a grid graphical object (“grob”)  grobMap &amp;lt;- ggplotGrob(map)  Make a container canvas  df &amp;lt;- data.</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>/about/</link>
-      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
-      
-      <guid>/about/</guid>
-      <description>This is a &amp;ldquo;hello world&amp;rdquo; example website for the blogdown package. The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.</description>
     </item>
     
   </channel>

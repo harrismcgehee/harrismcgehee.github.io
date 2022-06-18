@@ -1,0 +1,20 @@
+---
+title: Simon Says, "Run!" 36K
+author: Harris
+date: '2022-06-25'
+slug: simon-says-run-36k
+categories:
+  - R
+tags: []
+---
+
+
+```{=html}
+<meta property="og:title" content="Simon Says, 'Run!' Invite" />
+<meta property="og:image" content="/img/simon_run.png"/>
+```
+
+
+
+![](/img/Simon_Says_Run_June25_invite.pdf)
+

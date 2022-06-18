@@ -1,0 +1,133 @@
+---
+title: rstudio::conf(2018L) day 1 notes
+author: Harris
+date: '2018-02-06'
+slug: rstudio-conf-2018l-day-1-notes
+categories:
+  - R
+tags: []
+---
+
+# Tidy spatial data analysis 
+
+Edzer Pebesma
+
+ + sf package author
+ + [mapview](https://github.com/r-spatial/mapview) package extends leaflet to make nice maps
+ + raster works well with pipes
+ + working on [stars](https://github.com/r-spatial/stars) - spatiotemporal data - Space Time ARray data
+
+# Developing robust shiny apps with regression testing
+
+Winston Chang
+
+  + like VBA record macro
+     + runs code
+     + writes code
+  + take snapshots between interactions
+     - json objects giving state of all the outputs
+     - png screenshots of the app
+  + check out sublime text editor
+  + limitations 
+      - won't capture html widget inputs
+      - isn't helpful for dynamic external data
+  + Automatically run tests on a schedule with RStudio Connect
+  + Are integrations for Travis CI; documentation exists on the internet
+  + Are there timing issues?
+      - it tries to wait for output to update
+      - but if that doesn't work, put sys.sleep into your test script
+  
+# Make shiny fast by doing as little work as possible
+
+Alan Dipert
+  
+1. Benchmark
+    + model
+        + determine representative user action
+        + example: travel websites take time, but users expect them to
+            + use spinner to confirm the expectations if the user has to wait
+    + metrics
+        + determine the latencies experienced
+2. Analyze
+    + Produce the data
+    + Identify the slowest thing
+        + Rprof -> R profiler
+        + profvis -> visualize R profiler
+            + `profvis(runApp())`
+        + common:
+            + pre-process the data
+            + never `group_by() %>% filter()`
+            + CSVs are faster than `Rds` if the `Rds` are compressed (is default)
+            + plotCaching!: `plotCache()` will be available soon. Plotting takes a long time
+3. Recommend
+4. Optimize
+1. Loop
+
+# Scaling Shiny
+
+Sean Lopp
+
++ Shiny scales linearly 
++ Figure out the # of simultaneous users your app supports on a single process
++ Then add processors and then add servers
++ Has never talked to anyone supporting >100 simultaneous users on a Shiny app
+
+
+# Creating interactive web graphics suitable for exploratory data analysis 
+
+Carson Sievert
+
++ plotly looks amazing
++ crosstalk package
++ ggplotly
+
+# Beyond R: Using R Markdown with python, sql, bash, and more
+
+Aaron Berg
+
++ Use multilingual Rmarkdown by connecting it to different engines.
+
+# Modeling in the tidyverse 
+
+Max Kuhn
+
++ broom
++ recipes
++ rsample
++ tidyposterior
+    + put model metrics in terms of practical significance
+    + set a threshold that matters (0.5 miles per gallon)
+    + ROPE (region of practical estimates)
+        + "probability that the difference is practically significant"
++ yardstick
+
+# Tidy eval: programming with dplyr, tidyr, and ggplot2
+
+Hadley Wickham
+
+# An assignment operator to unpack vectors and lists
+
+Nathan Teetor
+
++ `library(zeallot)`
++ `c(result, error) %<-% safe_log("oops")
++ `starwards %>% select(height, weight) %->% c(height, weight)
++ `c(height, weight) %<-% (starwards %>% select(height, weight))
+    + use parentheses for order of operations fix
+    
+# Debugging techniques in RStudio 
+
+Amanda Gadrow
+
+1. `browser()`
+2. `debugonce()`
+3. `Debug > On Error > Break in Code
+4. Rerun with Debug
+5. options(shiny.fullstacktrace = TRUE)
+6. options(shiny.error = browser)
+7. runApp(..., displaymode="showcase")
+8. `options(shiny.reactlog=TRUE) runApp(...) showReactLog()`
+9. For deployed app
+    + `cat(file = stderror(), .... )`
+    + tail the log
+

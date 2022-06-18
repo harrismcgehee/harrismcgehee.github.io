@@ -1,0 +1,106 @@
+---
+title: extending tidyverse
+author: Harris
+date: '2018-01-31'
+slug: extending-tidyverse
+categories: []
+tags: []
+---
+
+
+```{r}
+list(a="a",b="b")
+unname(list(a="a",b="b"))
+
+unname(mtcars)
+
+```
+
+# find files/functions
+
+[](/img/20180131_ctrlperiod.png)
+
+# quick character vector
+Multiple cursors > delete; highlight, quote
+
+#  rprofile changes
+```{r}
+usethis::edit_r_profile()
+
+if (interactive()) {
+  suppressMessages(require(devtools))
+  suppressMessages(require(usethis))
+  suppressMessages(require(testthat))
+}
+
+options(
+  warnPartialMatchArgs = TRUE,
+  warnPartialMatchDollar = TRUE,
+  warnPartialMatchAttr = TRUE
+)
+```
+
+
+```{r}
+testthat::expect_named()
+```
+
+```{r}
+#put this at the top of a function
+browser()
+```
+
+```{r}
+usethis::use_coverage()
+
+# future version of devtools
+# devtools::test_coverage()
+
+library(covr)
+report(package_coverage())
+```
+
+```{r}
+purrr::modify()
+
+purrr::modify_if()
+
+identical(
+iris %>%
+  purrr::modify_if(is.factor, as.character),
+iris %>% 
+  dplyr::mutate_if(is.factor, as.character) )
+
+```
+
+```{r}
+purrr::map
+```
+
+# copy line
+
+`Alt + Shift + Down/Up`
+
+```{r}
+# output type of keep is always the same as the input
+purrr::keep
+```
+
+```{r}
+purrr::transpose()
+
+# with 
+purrr::safely()
+
+
+
+```
+
+```{r}
+library(tidyverse)
+species <- split(iris, iris$Species) 
+
+species
+
+writexl
+```

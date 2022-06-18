@@ -1,0 +1,41 @@
+---
+title: Real rstudio::conf takeaways
+author: Harris
+date: '2018-02-06'
+slug: real-rstudio-conf-takeaways
+categories:
+  - R
+tags: []
+---
+
+What a conference!
+
+Here are the highlights of the conference for me.
+
++ Understanding rlang/tidyeval:
+    + always `enquo` user input; and `!!` it to get it out
+    + unless it is a `...` input; then `quos(...)`; and `!!!` to get it out.
++ Reminding about shinytest and **profvis**
+
++ Packages
+    + [usethis](https://cran.r-project.org/web/packages/usethis/index.html)
+    + [testthat]
+    + [fs]
+    + [mapview]
+    + [shinytest](https://github.com/rstudio/shinytest)
+    + [lookup]
+
++ Meeting Jim Hester, author of many packages
++ Meeting Edzer P., author of sf
++ Meeting the Rstudio Support Team: Ian, Jay, Amanda
++ Meeting David Smith from Microsoft
++ Making connections with Thomas Wells, Navigant
++ Making connections with S Daniel Zayed, Navigant
++ Making connections with Christophe
+
++ Getting a copy of R for Data Science signed by the authors
+
+
+
+
+

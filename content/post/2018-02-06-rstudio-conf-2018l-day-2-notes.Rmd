@@ -1,0 +1,122 @@
+---
+title: rstudio::conf(2018L) day 2 notes
+author: Harris
+date: '2018-02-06'
+categories:
+  - R
+slug: rstudio-conf-2018l-day-2-notes
+---
+
+
+# Machine Learning with R and TensorFlow 
+
+JJ Allaire
+
++ TensorFlow
+    + numerical computing library
+        + like BLAS
+    + layer = Transformation of data
+    + feature engineering is learned, not coded
+        + learning to uncrumple a paper ball
+    + "deep" = "multiple (often many) layers of representation"
++ Keras API
++ Estimator API / "classic ML models"
++ Core API
+
++ Keras
+    + reticulate/python bindings
+    + Google's preferred interface to TensorFlow
+    + modify in place (rather than copy and modify)
+        + pipes don't use assignment arrows
+    + Layers
+    + Optimizers
+    + Losses
+    + Metrics
+    + (https://tensorflow.rstudio.com/learn/gallery.html)
+
++ CloudML
+    + do hyper parameter tuning with YAML and send to Google
++ tfdeploy
+    + serve model with REST API
+
++ [Deep Learning with R](https://www.amazon.com/Deep-Learning-R-Francois-Chollet/dp/161729554X)
+    + all code no math
+    + https://github.com/jjallaire/deep-learning-with-r-notebooks
++ [Deep Learning Goodfellow](http://www.deeplearningbook.org/)
+    + all math no code
++ Google AutoML
+    + use deep learning to learn the model architecture
+    + very computationally expensive
++ Keras applications using pre-trained models
+    + "transfer learning"
+    + mainly useful in image recognition
+    + strip the last layer off and put your own dense layer on to classify into your labels
+    
+# Deploying TensorFlow models with tfdeploy
+
+Javier Luraschi
+
++ https://www.tensorflow.org/serving/
++ cloudml
++ rstudio connect
++ export then deploy
++ kerasjs::convert()
+
+# fireside chat highlights
+
+## R in industry discussion 
+
+Eduardo Ariño de la Rubia, Tanya Cashorali, Eric Colson, Elaine McVey, David Robinson / Tareef Kawaf (moderator)-
+
++ Dave Robinson
+    +  companies care about results, not programming language
+
++ Elaine McVey
+    + Flex dashboards - can produce quickly and highly customized vs. Tableau or other Build vs. Buy
+
++ Hard transition from all desktop -> servers
+    + Have to establish a playground for data scientists
+    + then offload the product to IT
+    + this is uncomfortable 
+    + "we care about innovation more than stability"
+        + we use a chaos monkey to test services https://github.com/Netflix/chaosmonkey
+    + We use public shaming to tell who is spending the most money on cloud services
+    + data scientists have the APIs to spin up clusters/servers
+    + data scientists are given 2 weeks notice that a server will be taken down "as a test"; giving them time to figure out how resilient their things are to outtages
++ "Scientific debt" to build buy-in for Data Science projects
+    + If we don't understand our business, we are incurring real tangible debt, similar to "technical debt"
+
++ "There is no way we could build software as well as using open source software"
+    + similar to concerns about cloud server outtages
+        + Stichfix relies on Amazon servers; 1 outtage right before IPO
+        + Imagine how many outtages would have occurred if they didn't use Amazon servers
+
++ Find the prior art for getting approval to do something that IT doesn't want you to
++ What is the risk of a new tool/ open source?
+    + If we DO use it
+    + If we DON'T use it
+
++ Hiring
+    + give me evidence that you can solve unspecified problems and make a decision and make the world a better place
+        + git presence
+        + meetup presentations
+        + contributed to open source packages
+            + even typos and spell checks
+            + evidence that you know how to collaborate
+
++ Change management != Transistion Management
+    + Change management is about tools and training
+    + Transition management is about people's identity and feelings
+        + they thought they were an expert in something and then you took it away from them
+
+# Tidyverse discussion 
+
+Jenny Bryan, Mine Çetinkaya-Rundel, Max Kuhn, Hadley Wickham, / Mara Averick (moderator)
+
++ Tidyverse is a dialect of the R language
++ Base R is not a dialect because there is no guaranteed mutual comprehension of others' code in Base
+
+
+
+        
+    

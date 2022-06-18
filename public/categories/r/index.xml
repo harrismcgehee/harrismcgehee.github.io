@@ -6,10 +6,19 @@
     <description>Recent content in R on Harris McGehee learning</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jun 2022 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Simon Says, &#39;Run!&#39; 36K</title>
+      <link>/2022/06/17/simon-says-run-36k/</link>
+      <pubDate>Fri, 17 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/2022/06/17/simon-says-run-36k/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>tibble::deframe and writexl::write_xlsx</title>
